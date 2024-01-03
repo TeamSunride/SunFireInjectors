@@ -72,16 +72,16 @@ def NormalisedHEM():
     plt.tight_layout()
     plt.show()
 
-# Plot Mass Flow Rate vs diameter(0 to 2) for ambient temperature of 20degC and N = 12
-temps = 20
-d = np.linspace(0.1, 2.5, 100) / 1000
-N = 12
-
-m = plotting(d, temps, N)
-plt.figure()
-plt.plot(d * 1000, m)
-plt.xlabel('Diameter (mm)')
-plt.ylabel('Mass Flow Rate (kg/s)')
-plt.title('Mass Flow Rate vs Diameter')
-plt.tight_layout()
-plt.show()
+# # Plot Mass Flow Rate vs diameter(0 to 2) for ambient temperature of 20degC and N = 12
+# temps = 20
+# d = np.linspace(0.1, 2.5, 100) / 1000
+# N = 12
+#
+# m = plotting(d, temps, N)
+# plt.figure()
+# plt.plot(d * 1000, m)
+# plt.xlabel('Diameter (mm)')
+# plt.ylabel('Mass Flow Rate (kg/s)')
+# plt.title('Mass Flow Rate vs Diameter')
+# plt.tight_layout()
+# plt.show()
