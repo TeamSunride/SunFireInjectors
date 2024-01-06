@@ -141,7 +141,7 @@ def enthalpy_sliders():
         min=-10,
         max=60,
         step=0.5,
-        description=r'$T_{\text{const}}$ (°C)',
+        description='Tsat (°C)',
         continuous_update=False
     )
 
@@ -150,7 +150,7 @@ def enthalpy_sliders():
         min=1,
         max=90,
         step=.5,
-        description=r'$P_{\text{const}}$ (bar)',
+        description=f'Psat (bar)',
         continuous_update=False
     )
     return isoT_slider, isoP_slider

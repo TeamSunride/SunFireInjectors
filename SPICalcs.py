@@ -8,11 +8,11 @@ def A(d):
     return np.pi * (d / 2)**2
 def m_CPI(A, rho0, P1, P2, N, Cd=0.66):
     return A * Cd * N * np.sqrt(2 * rho0 * (P2 - P1))
-def CalcCPI(T, substance, P_chamber, N, d):
+def CalcSPI(T, substance, P_chamber, N, d, Cd=0.66):
     P_sat = CP.PropsSI('P', 'T', T + 273.15, 'Q', 0, substance) / 1e5
     D_sat = CP.PropsSI('D', 'T', T + 273.15, 'Q', 0, substance)
     m_CPI_vectorized = np.vectorize(m_CPI)
-    return m_CPI_vectorized(A(d), D_sat, P_sat, P_chamber, N), P_sat, D_sat
+    return m_CPI_vectorized(A(d), D_sat, P_sat, P_chamber, N, Cd), P_sat, D_sat
 
 def SPI_plot(orrifaces=12):
     # Find critical temperature of N2O
@@ -27,7 +27,7 @@ def SPI_plot(orrifaces=12):
     d = np.linspace(0.1, 2.5, 100) / 1000
 
     def plot_masses(T, substance, P_chamber, N, d):
-        m, P_sat, D_sat = CalcCPI(T, substance, P_chamber, N, d)
+        m, P_sat, D_sat = CalcSPI(T, substance, P_chamber, N, d)
         plt.plot(d * 1000, m, label=f'{T:.1f} C', color=next(color), linewidth=.1, alpha=1)
     plt.figure()
     # set colors to viridis colormap
@@ -47,7 +47,7 @@ def SPI_plot(orrifaces=12):
     cbar.set_label('Upstream Temperature (C)')
 
     # Use Calculate CPI to find mass flow rates for just critical temperature
-    m, P_sat, D_sat = CalcCPI(T_critical, substance, P_chamber, N, d)
+    m, P_sat, D_sat = CalcSPI(T_critical, substance, P_chamber, N, d)
     # Plot with a filled in region below the curve and x axis
     plt.fill_between(d * 1000, m, color='yellow', alpha=0.2)
     #annotate the center of the filled in region as 'Super Critical'
@@ -75,7 +75,7 @@ if __name__ == '__main__':
     d = np.linspace(0.1, 2.5, 100) / 1000
     N = 12
     Pc = 20e5
-    m = CalcCPI(temps, 'NitrousOxide', Pc, N, d)[0]
+    m = CalcSPI(temps, 'NitrousOxide', Pc, N, d)[0]
     plt.figure()
     plt.plot(d * 1000, m)
     plt.xlabel('Diameter (mm)')

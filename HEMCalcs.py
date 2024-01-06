@@ -26,11 +26,11 @@ def HEM_CP(T1, P2, subst='NitrousOxide'):
     rho2 = CP.PropsSI('D', 'P', P2, 'S', s1, subst)
     return h1, h2, rho2
 
-def plotting(d, T, N):
+def plotting(d, T, N, Cd=0.66):
     h1, h2, rho2 = HEM_CP(T, P2)
 
     m_HEM_vectorized = np.vectorize(mHEM)
-    return m_HEM_vectorized(A(d), rho2, h1, h2, N)
+    return m_HEM_vectorized(A(d), rho2, h1, h2, N, Cd)
 
 def HEMmassflowrate():
     temps = np.linspace(-10, 32, 500)

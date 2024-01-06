@@ -4,16 +4,16 @@ import CoolProp.CoolProp as CP
 import ipywidgets as widgets
 
 from HEMCalcs import plotting, A
-from SPICalcs import CalcCPI, m_CPI
+from SPICalcs import CalcSPI, m_CPI
 
-def NHNEPlot(T, N, kap):
+def NHNEPlot(T, N, kap, Cd, Nom):
     d = np.linspace(0.1, 6, 1000) / 1000
     Pc = 20e5
 
-    mNom = 1.36
-    mHEM = plotting(d, T, N)
-    mSPI = CalcCPI(T, 'NitrousOxide', Pc, N, d)[0]
-    mkappa = (1 / (1 + kap)) * mSPI + (1 - (kap / (1 + kap))) * mHEM
+    mNom = Nom
+    mHEM = plotting(d, T, N, Cd)  # remove Cd=Cd
+    mSPI = CalcSPI(T, 'NitrousOxide', Pc, N, d, Cd)[0]
+    mkappa = ((kap / (1 + kap)) * mSPI) + (1/(1 + kap) * mHEM)
 
     plt.plot(d * 1000, mHEM, label=r'$\dot{m}_{HEM}$')
     plt.plot(d * 1000, mSPI, label=r'$\dot{m}_{SPI}$')
@@ -35,8 +35,8 @@ def NHNEPlot(T, N, kap):
     plt.plot(d_kappa, mNom, color='tab:green', marker='o', label=f'$d_{{\\kappa}}={d_kappa:.2f}$ mm')
     plt.xlabel('Diameter (mm)')
     plt.ylabel('Mass Flow Rate (kg/s)')
-    plt.title(f'Mass Flow Rate vs Diameter\n {N} Orifices at $T_{{tank}} =${T}°C')
-    plt.xlim(0, 2.5)
+    plt.title(f'Mass Flow Rate vs Diameter\n {N} Orifices at $T_{{tank}} =${T:.2f}°C')
+    plt.xlim(0, 3)
     plt.ylim(0, 2)
     plt.tight_layout()
     plt.legend()
@@ -47,9 +47,9 @@ def NHNESliders():
     T_slider = widgets.FloatSlider(
         value=30,
         min=-10,
-        max=60,
+        max=32,
         step=0.5,
-        description=r'$T_{\text{tank}}$ (°C)',
+        description=f'T',
         continuous_update=False
     )
     N_slider = widgets.IntSlider(
@@ -65,8 +65,25 @@ def NHNESliders():
         min=0,
         max=2,
         step=0.01,
-        description=r'$\kappa$',
+        description=f'kappa',
         continuous_update=False
     )
-    return T_slider, N_slider, kap_slider
+
+    Cd_slider = widgets.FloatSlider(
+        value=0.6,
+        min=0,
+        max=1.5,
+        step=0.01,
+        description=f'Cd',
+        continuous_update=False
+    )
+    Nom_slider = widgets.FloatSlider(
+        value=1.36,
+        min=.3,
+        max=2.5,
+        step=0.01,
+        description=f'mass',
+        continuous_update=False
+    )
+    return T_slider, N_slider, kap_slider, Cd_slider, Nom_slider
 
