@@ -36,7 +36,7 @@ def NHNEPlot(T, N, kap, Cd, Nom):
     plt.xlabel('Diameter (mm)')
     plt.ylabel('Mass Flow Rate (kg/s)')
     plt.title(f'Mass Flow Rate vs Diameter\n {N} Orifices at $T_{{tank}} =${T:.2f}°C')
-    plt.xlim(0, 3)
+    plt.xlim(0, 3.5)
     plt.ylim(0, 2)
     plt.tight_layout()
     plt.legend()
